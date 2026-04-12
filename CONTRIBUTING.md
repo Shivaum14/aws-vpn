@@ -20,6 +20,16 @@ brew install pre-commit   # or: pip install pre-commit
 - PR titles follow [Conventional Commits](https://www.conventionalcommits.org/) format:
   `feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`, `refactor: ...`
 
+## PR expectations
+
+Each PR should:
+
+- correspond to one stage in the project roadmap
+- be small enough to review in a single sitting
+- include validation steps that can be run to confirm the change works
+- leave the repo in a valid, working state — nothing broken, nothing half-finished
+- only introduce code, config, or documentation for what is implemented in that PR
+
 ## Pre-commit hooks
 
 ```bash
@@ -29,16 +39,13 @@ pre-commit run --all-files  # run manually across all files
 
 Hooks run automatically on every `git commit`. The current hooks cover file hygiene (trailing
 whitespace, end-of-file newlines, YAML validity) and Python formatting via ruff. Additional
-tool-specific hooks (Terraform fmt, ansible-lint) are added in later PRs.
+hooks are added as new tooling is introduced.
 
 ## Linting
 
 ```bash
 make lint   # runs pre-commit across all files
 ```
-
-Tool-specific lint targets (`terraform fmt`, `ansible-lint`, `ruff`, `mypy`) are added to the
-Makefile as each component is introduced.
 
 ## Security reminders
 
