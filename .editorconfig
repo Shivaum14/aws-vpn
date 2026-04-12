@@ -1,0 +1,39 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# HCL (Terraform) and YAML — 2-space indent is the community convention
+[*.{tf,tfvars,hcl}]
+indent_style = space
+indent_size = 2
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Python — 4-space indent per PEP 8
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# Markdown — trailing whitespace is meaningful (line breaks), so don't trim
+[*.md]
+trim_trailing_whitespace = false
+
+# JSON
+[*.json]
+indent_style = space
+indent_size = 2
+
+# Makefile — tabs are required by make
+[Makefile]
+indent_style = tab

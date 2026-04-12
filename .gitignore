@@ -1,1 +1,90 @@
+# ── Terraform ────────────────────────────────────────────────────────────────
+# Never commit real variable values (contain VPC/subnet IDs, operator CIDR, etc.)
+*.tfvars
+!*.tfvars.example
+
+# State files — use remote state (S3) for teams; local state is fine for solo dev
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+
+# Terraform working directory and lock is committed, but cache is not
+.terraform/
+# .terraform.lock.hcl is intentionally committed (provider version pinning)
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Override files (local-only overrides, never shared)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ── WireGuard keys and configs ───────────────────────────────────────────────
+# Private keys — must never be committed under any circumstances
+privatekey
+publickey
+*.key
+
+# Generated client config files — import into WireGuard app then delete locally
+# .example files are safe to commit (they contain only placeholder values)
+*.conf
+!*.conf.example
+
+# ── Client registry ───────────────────────────────────────────────────────────
+# Local peer metadata — gitignored because it may contain public keys and IPs
+clients.json
+
+# Ansible vars file written by Python CLI before triggering Ansible re-run
+peers.json
+
+# ── Ansible ───────────────────────────────────────────────────────────────────
+# Generated inventory — contains real IP addresses; regenerate with `make inventory`
+ansible/inventory/hosts.ini
+
+# Ansible retry files
+*.retry
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# Test and coverage artefacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ── Secrets and environment ───────────────────────────────────────────────────
 .env
+.env.*
+!.env.example
+
+# ── Editor and OS ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
