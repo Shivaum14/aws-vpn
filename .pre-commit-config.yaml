@@ -1,0 +1,34 @@
+repos:
+  # ── General file hygiene ──────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ".*\\.md$"  # trailing whitespace is meaningful in Markdown
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: detect-private-key  # catches accidentally committed key material
+
+  # ── Python ────────────────────────────────────────────────────────────────
+  # ruff replaces flake8, isort, and black in one tool
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # ── Terraform ─────────────────────────────────────────────────────────────
+  # terraform fmt is added here once the terraform/ directory exists (PR 2+).
+  # It is commented out in PR 1 because there are no .tf files yet — pre-commit
+  # will fail if a hook references files that don't exist in the repo.
+  #
+  # - repo: https://github.com/antonbabenko/pre-commit-terraform
+  #   rev: v1.92.0
+  #   hooks:
+  #     - id: terraform_fmt
