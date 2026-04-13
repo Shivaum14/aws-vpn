@@ -24,11 +24,11 @@ repos:
       - id: ruff-format
 
   # ── Terraform ─────────────────────────────────────────────────────────────
-  # terraform fmt is added here once the terraform/ directory exists (PR 2+).
-  # It is commented out in PR 1 because there are no .tf files yet — pre-commit
-  # will fail if a hook references files that don't exist in the repo.
-  #
-  # - repo: https://github.com/antonbabenko/pre-commit-terraform
-  #   rev: v1.92.0
-  #   hooks:
-  #     - id: terraform_fmt
+  # terraform_fmt runs `terraform fmt` on all .tf files. This enforces the
+  # canonical HCL style (alignment, spacing) that `terraform fmt -check` also
+  # verifies in CI. Using the pre-commit hook means formatting is applied
+  # automatically on every commit rather than needing a separate format step.
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.92.0
+    hooks:
+      - id: terraform_fmt

@@ -1,0 +1,13 @@
+# terraform.tfvars.example — Example variable values for the dev environment.
+#
+# Copy this file to terraform.tfvars and fill in your real values.
+# terraform.tfvars is gitignored — never commit it.
+#
+# In later PRs, sensitive values (vpc_id, subnet_id, operator_cidr) will be
+# added here. Those must never appear in git history.
+
+aws_region     = "eu-west-2"
+aws_profile    = "dev"
+aws_account_id = "YOUR_DEV_ACCOUNT_ID"  # prevents accidental apply to wrong account
+project        = "aws-vpn"
+environment    = "dev"
