@@ -3,8 +3,8 @@
 # Copy this file to terraform.tfvars and fill in your real values.
 # terraform.tfvars is gitignored — never commit it.
 #
-# In later PRs, sensitive values (vpc_id, subnet_id, operator_cidr) will be
-# added here. Those must never appear in git history.
+# Sensitive values (VPC ID, subnet ID, operator CIDR) must never be committed.
+# Add them here as infrastructure is introduced, then keep this file gitignored.
 
 aws_region     = "eu-west-2"
 aws_profile    = "dev"

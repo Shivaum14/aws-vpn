@@ -7,5 +7,5 @@
 # Child modules do not declare a provider or backend — those are inherited
 # from the root module that instantiates them.
 #
-# Resources are added here in PR 3: security group, IAM role, Elastic IP,
-# and EC2 instance.
+# This module is currently an empty scaffold. Resources are introduced once
+# the module skeleton is in place.

@@ -35,5 +35,5 @@ provider "aws" {
 module "vpn" {
   source = "../../modules/vpn-instance"
 
-  # Variables are passed to the module here as the module gains inputs (PR 3+).
+  # No input variables yet — the module is currently an empty scaffold.
 }
