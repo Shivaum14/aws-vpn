@@ -35,5 +35,23 @@ provider "aws" {
 module "vpn" {
   source = "../../modules/vpn-instance"
 
-  # No input variables yet — the module is currently an empty scaffold.
+  # Networking — must be set in terraform.tfvars (no defaults)
+  vpc_id    = var.vpc_id
+  subnet_id = var.subnet_id
+
+  # Access control — must be set in terraform.tfvars (no defaults)
+  key_name      = var.key_name
+  operator_cidr = var.operator_cidr
+
+  # Account context — passed through for IAM policy ARN construction
+  aws_account_id = var.aws_account_id
+  aws_region     = var.aws_region
+
+  # Naming and tagging
+  project     = var.project
+  environment = var.environment
+
+  # WireGuard ingress — defaults to open (0.0.0.0/0) for roaming clients.
+  # Override in terraform.tfvars if you have a fixed egress IP.
+  wireguard_allowed_cidrs = var.wireguard_allowed_cidrs
 }

@@ -2,12 +2,27 @@
 #
 # Copy this file to terraform.tfvars and fill in your real values.
 # terraform.tfvars is gitignored — never commit it.
-#
-# Sensitive values (VPC ID, subnet ID, operator CIDR) must never be committed.
-# Add them here as infrastructure is introduced, then keep this file gitignored.
 
 aws_region     = "eu-west-2"
 aws_profile    = "dev"
-aws_account_id = "YOUR_DEV_ACCOUNT_ID"  # prevents accidental apply to wrong account
-project        = "aws-vpn"
-environment    = "dev"
+aws_account_id = "YOUR_DEV_ACCOUNT_ID"   # prevents accidental apply to wrong account
+
+project     = "aws-vpn"
+environment = "dev"
+
+# Existing VPC and public subnet to deploy into
+vpc_id    = "vpc-XXXXXXXXXXXXXXXXX"
+subnet_id = "subnet-XXXXXXXXXXXXXXXXX"
+
+# EC2 key pair name — must already exist in the aws_region
+# Create with: aws ec2 create-key-pair --key-name aws-vpn-dev --query KeyMaterial --output text --profile dev > ~/.ssh/aws-vpn-dev.pem
+# Then: chmod 600 ~/.ssh/aws-vpn-dev.pem
+key_name = "aws-vpn-dev"
+
+# Your current public IP — only this address can SSH to the instance
+# Find with: curl -s https://checkip.amazonaws.com
+operator_cidr = "YOUR_IP/32"
+
+# WireGuard ingress — open by default for roaming clients
+# Uncomment and set to your fixed egress IP if you want to restrict access:
+# wireguard_allowed_cidrs = ["YOUR_IP/32"]
