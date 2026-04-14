@@ -1,0 +1,8 @@
+---
+# Handlers are triggered by tasks via `notify:`.
+# They run once at the end of a play, even if notified multiple times.
+
+- name: Restart chronyd
+  ansible.builtin.service:
+    name: chronyd
+    state: restarted

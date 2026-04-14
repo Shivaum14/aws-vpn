@@ -1,0 +1,5 @@
+---
+# Default variables for the common role.
+# Override these in group_vars/ or playbook vars to change behaviour.
+
+common_timezone: "UTC"

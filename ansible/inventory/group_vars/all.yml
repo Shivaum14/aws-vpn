@@ -1,0 +1,13 @@
+---
+# Group vars applied to every host in the inventory.
+#
+# WireGuard configuration values are defined here so they are consistent
+# across the bootstrap and wireguard roles, and visible to anyone reading
+# the inventory. The wireguard role (PR 5) reads these directly; they are
+# declared here rather than in role defaults so the values are easy to find
+# and override per environment.
+
+wg_port: 51820
+wg_interface: wg0
+wg_server_address: "10.8.0.1/24"
+wg_client_subnet: "10.8.0.0/24"

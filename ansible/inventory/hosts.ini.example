@@ -1,0 +1,12 @@
+# hosts.ini.example — Example inventory file.
+#
+# The real hosts.ini is generated automatically from Terraform output.
+# It is gitignored because it contains a real IP address.
+#
+# To generate it, run:
+#   make inventory
+#
+# See scripts/gen-inventory.sh for the generation logic.
+
+[vpn]
+wireguard-server ansible_host=1.2.3.4

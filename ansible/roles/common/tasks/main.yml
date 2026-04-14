@@ -1,0 +1,33 @@
+---
+# OS baseline tasks applied to all VPN hosts.
+#
+# NOTE: This role does NOT run `dnf upgrade -y`. A full system upgrade on every
+# playbook run is slow, non-deterministic (it pulls whatever is current at run
+# time), and makes runs unpredictable in effect. Security patching is better
+# handled at deploy time or via a separate targeted operation. This is an
+# explicit choice, not an oversight.
+
+- name: Install baseline packages
+  ansible.builtin.dnf:
+    name:
+      - chrony    # NTP time synchronisation — required for WireGuard key exchange
+      - net-tools # ifconfig, netstat — useful for diagnostics
+      - tcpdump   # packet capture — useful for debugging WireGuard traffic
+    state: present
+
+- name: Check current timezone
+  ansible.builtin.command: timedatectl show --property=Timezone --value
+  register: common_current_tz
+  changed_when: false
+
+- name: Set system timezone
+  ansible.builtin.command: timedatectl set-timezone {{ common_timezone }}
+  when: common_current_tz.stdout != common_timezone
+  changed_when: common_current_tz.stdout != common_timezone
+  notify: Restart chronyd
+
+- name: Enable and start chronyd
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: true
