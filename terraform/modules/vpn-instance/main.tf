@@ -70,7 +70,7 @@ data "aws_subnet" "public" {
 # The security group is the network firewall for the instance.
 #
 # Inbound rules:
-#   - UDP 51820: WireGuard traffic. Defaults to open (0.0.0.0/0 + ::/0) because
+#   - UDP 51820: WireGuard traffic. Defaults to open (0.0.0.0/0, IPv4 only) because
 #     VPN clients are typically roaming (dynamic home IPs, mobile devices). If
 #     your egress IP is fixed you can narrow this via var.wireguard_allowed_cidrs.
 #   - TCP 22: SSH access, restricted to var.operator_cidr only. This is a required
