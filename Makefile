@@ -52,7 +52,7 @@ inventory: ## Generate ansible/inventory/hosts.ini from Terraform output
 
 # SSH_KEY: path to the EC2 private key for Ansible.
 # Set in .env (preferred) or pass on the command line: make bootstrap SSH_KEY=/path/to/key.pem
-# If unset, Ansible falls back to private_key_file in ansible/ansible.cfg.
+# Required — ansible.cfg does not set a default key path.
 SSH_KEY ?=
 
 .PHONY: bootstrap
