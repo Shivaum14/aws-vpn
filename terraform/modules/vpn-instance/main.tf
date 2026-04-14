@@ -85,7 +85,7 @@ data "aws_subnet" "public" {
 # rules for responses to allowed inbound connections.
 resource "aws_security_group" "vpn" {
   name        = "${var.project}-${var.environment}-vpn"
-  description = "WireGuard VPN server — WireGuard ingress and restricted SSH"
+  description = "WireGuard VPN server - WireGuard ingress and restricted SSH"
   vpc_id      = data.aws_vpc.main.id
 
   # WireGuard — UDP 51820
