@@ -1,0 +1,37 @@
+---
+# Store the server public key in SSM Parameter Store.
+#
+# Triggered when the key pair is first generated (keys never change unless the
+# instance is replaced). Uses argv list form to avoid shell quoting issues with
+# the base64 key value. The wireguard_public_key fact is set by the task that
+# reads /etc/wireguard/publickey, which runs before handlers are flushed.
+- name: Push public key to SSM
+  ansible.builtin.command:
+    argv:
+      - aws
+      - ssm
+      - put-parameter
+      - --name
+      - "{{ wireguard_ssm_public_key_param }}"
+      - --value
+      - "{{ wireguard_public_key }}"
+      - --type
+      - String
+      - --overwrite
+  changed_when: true
+
+# Reload the WireGuard interface configuration without tearing down the tunnel.
+#
+# `wg syncconf` applies the new configuration (e.g. added or removed peers) to
+# the running interface atomically. It differs from a full restart in that:
+#   - existing peer handshakes and sessions are preserved
+#   - clients do not notice the reload (no dropped packets, no reconnect)
+#
+# `wg-quick strip` produces a wg(8)-compatible subset of wg0.conf by removing
+# wg-quick-specific directives (Address, DNS, PostUp, etc.) that wg itself does
+# not understand. The process substitution <(...) requires bash explicitly.
+- name: Reload WireGuard
+  ansible.builtin.shell:
+    cmd: wg syncconf {{ wg_interface }} <(wg-quick strip {{ wg_interface }})
+    executable: /bin/bash
+  changed_when: true

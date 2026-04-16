@@ -1,0 +1,6 @@
+---
+- name: Install and configure WireGuard VPN server
+  hosts: vpn
+  become: true
+  roles:
+    - wireguard
