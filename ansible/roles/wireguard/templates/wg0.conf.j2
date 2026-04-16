@@ -1,0 +1,32 @@
+# /etc/wireguard/{{ wg_interface }}.conf
+# Managed by Ansible — do not edit manually.
+# Changes made here will be overwritten on the next playbook run.
+
+[Interface]
+Address    = {{ wg_server_address }}
+ListenPort = {{ wg_port }}
+PrivateKey = {{ wireguard_private_key }}
+
+# NAT masquerade: rewrite the source IP of packets leaving the VPN interface
+# to the server's private IP before they enter the VPC. This way VPC resources
+# see traffic from the server's ENI, not the client's WireGuard address, and
+# no VPC route table changes are required.
+#
+# FORWARD rules allow the kernel to route packets between wg0 and eth0 in both
+# directions. PostUp/PreDown ensure the rules are added on interface up and
+# removed cleanly on interface down — no separate iptables persistence needed.
+PostUp   = iptables -A FORWARD -i %i -j ACCEPT; \
+           iptables -A FORWARD -o %i -j ACCEPT; \
+           iptables -t nat -A POSTROUTING -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
+PreDown  = iptables -D FORWARD -i %i -j ACCEPT; \
+           iptables -D FORWARD -o %i -j ACCEPT; \
+           iptables -t nat -D POSTROUTING -o {{ ansible_default_ipv4.interface }} -j MASQUERADE
+{% if wg_peers | default([]) %}
+
+{% for peer in wg_peers %}
+[Peer]
+# {{ peer.name }}
+PublicKey  = {{ peer.public_key }}
+AllowedIPs = {{ peer.allowed_ips }}
+{% endfor %}
+{% endif %}

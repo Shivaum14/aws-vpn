@@ -62,6 +62,10 @@ inventory: ## Generate ansible/inventory/hosts.ini from Terraform output
 bootstrap: _require-ssh-key-path ## Run Ansible bootstrap playbook (OS baseline: packages, timezone, NTP)
 	cd ansible && ansible-playbook playbooks/bootstrap.yml --private-key $(SSH_KEY_PATH)
 
+.PHONY: wireguard
+wireguard: _require-ssh-key-path ## Run Ansible WireGuard playbook (install WireGuard, configure server, start service)
+	cd ansible && ansible-playbook playbooks/wireguard.yml --private-key $(SSH_KEY_PATH)
+
 .PHONY: lint-ansible
 lint-ansible: ## Run ansible-lint on the Ansible directory
 	cd ansible && ansible-lint .

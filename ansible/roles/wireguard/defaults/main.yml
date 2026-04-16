@@ -1,0 +1,13 @@
+---
+# Role-specific defaults for the wireguard role.
+#
+# Shared WireGuard network settings (port, interface, address) live in
+# ansible/inventory/group_vars/all.yml so they are visible at the inventory
+# level and consistent across roles. Only values that are implementation
+# details of this role belong here.
+
+# SSM Parameter Store path where the server public key is stored.
+# The Python client tooling reads this to populate [Peer] blocks in client
+# configs. The path lives in role defaults so it can be overridden per
+# environment without touching the playbook.
+wireguard_ssm_public_key_param: "/vpn/server/public_key"
