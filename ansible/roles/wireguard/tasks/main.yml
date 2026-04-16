@@ -6,9 +6,12 @@
 # is idempotent — running this role twice produces zero changes on the
 # second run.
 
-- name: Install wireguard-tools
+- name: Install WireGuard and runtime dependencies
   ansible.builtin.dnf:
-    name: wireguard-tools
+    name:
+      - wireguard-tools  # wg, wg-quick
+      - iptables         # required by PostUp/PreDown NAT rules in wg0.conf
+      - awscli           # required by SSM handler to store server public key
     state: present
 
 # ── Kernel IP forwarding ────────────────────────────────────────────────────
