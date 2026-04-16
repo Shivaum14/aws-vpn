@@ -8,6 +8,10 @@
 
 TF_DIR := terraform/environments/dev
 
+# Load local variable overrides from .env if it exists.
+# Copy .env.example to .env and fill in your values. .env is gitignored.
+-include .env
+
 .PHONY: help
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
@@ -36,3 +40,28 @@ tf-apply: ## Apply Terraform changes (creates/modifies AWS resources)
 .PHONY: tf-destroy
 tf-destroy: ## Destroy all Terraform-managed AWS resources
 	terraform -chdir=$(TF_DIR) destroy
+
+# ── Ansible ───────────────────────────────────────────────────────────────────
+# Ansible commands are run from the ansible/ directory so that ansible.cfg is
+# automatically picked up (Ansible searches for ansible.cfg in the current
+# working directory first).
+#
+# SSH_KEY_PATH must be set in .env before running any Ansible target.
+# See .env.example for the required format.
+
+.PHONY: _require-ssh-key-path
+_require-ssh-key-path:
+	@test -n "$(SSH_KEY_PATH)" || \
+		(echo "ERROR: SSH_KEY_PATH is not set. Add it to .env (see .env.example)."; exit 1)
+
+.PHONY: inventory
+inventory: ## Generate ansible/inventory/hosts.ini from Terraform output
+	./scripts/gen-inventory.sh
+
+.PHONY: bootstrap
+bootstrap: _require-ssh-key-path ## Run Ansible bootstrap playbook (OS baseline: packages, timezone, NTP)
+	cd ansible && ansible-playbook playbooks/bootstrap.yml --private-key $(SSH_KEY_PATH)
+
+.PHONY: lint-ansible
+lint-ansible: ## Run ansible-lint on the Ansible directory
+	cd ansible && ansible-lint .

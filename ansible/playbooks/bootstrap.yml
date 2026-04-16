@@ -1,0 +1,18 @@
+---
+# bootstrap.yml — Apply OS baseline configuration to all VPN hosts.
+#
+# Applies the common role, which installs baseline packages, sets the
+# timezone, and ensures NTP is running.
+#
+# Prerequisites:
+#   - make inventory (generates ansible/inventory/hosts.ini from Terraform output)
+#
+# Run with:
+#   make bootstrap
+
+- name: Bootstrap VPN host
+  hosts: vpn
+  become: true
+
+  roles:
+    - common
