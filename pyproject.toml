@@ -1,6 +1,8 @@
 [project]
 name = "aws-vpn"
 version = "0.1.0"
+description = ""
+readme = "README.md"
 requires-python = ">=3.12"
 
 [tool.ruff]
@@ -12,16 +14,13 @@ select = [
   "E",   # pycodestyle errors
   "W",   # pycodestyle warnings
   "F",   # pyflakes
-  "I",   # isort
-  "B",   # flake8-bugbear
-  "UP",  # pyupgrade
-  "ANN", # flake8-annotations (type hints)
-  "S",   # flake8-bandit (security)
+  # "I",   # isort
+  # "B",   # flake8-bugbear
+  # "UP",  # pyupgrade
+  # "ANN", # flake8-annotations (type hints)
+  # "S",   # flake8-bandit (security)
 ]
-ignore = [
-  "ANN101", # missing type annotation for `self`
-  "ANN102", # missing type annotation for `cls`
-]
+ignore = []
 
 [tool.mypy]
 python_version = "3.12"

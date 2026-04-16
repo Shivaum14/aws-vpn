@@ -45,20 +45,22 @@ tf-destroy: ## Destroy all Terraform-managed AWS resources
 # Ansible commands are run from the ansible/ directory so that ansible.cfg is
 # automatically picked up (Ansible searches for ansible.cfg in the current
 # working directory first).
+#
+# SSH_KEY_PATH must be set in .env before running any Ansible target.
+# See .env.example for the required format.
+
+.PHONY: _require-ssh-key-path
+_require-ssh-key-path:
+	@test -n "$(SSH_KEY_PATH)" || \
+		(echo "ERROR: SSH_KEY_PATH is not set. Add it to .env (see .env.example)."; exit 1)
 
 .PHONY: inventory
 inventory: ## Generate ansible/inventory/hosts.ini from Terraform output
 	./scripts/gen-inventory.sh
 
-# SSH_KEY: path to the EC2 private key for Ansible.
-# Set in .env (preferred) or pass on the command line: make bootstrap SSH_KEY=/path/to/key.pem
-# Required — ansible.cfg does not set a default key path.
-SSH_KEY ?=
-
 .PHONY: bootstrap
-bootstrap: ## Run Ansible bootstrap playbook (OS baseline: packages, timezone, NTP)
-	cd ansible && ansible-playbook playbooks/bootstrap.yml \
-		$(if $(SSH_KEY),--private-key $(SSH_KEY),)
+bootstrap: _require-ssh-key-path ## Run Ansible bootstrap playbook (OS baseline: packages, timezone, NTP)
+	cd ansible && ansible-playbook playbooks/bootstrap.yml --private-key $(SSH_KEY_PATH)
 
 .PHONY: lint-ansible
 lint-ansible: ## Run ansible-lint on the Ansible directory
